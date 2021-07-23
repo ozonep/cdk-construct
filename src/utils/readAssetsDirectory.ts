@@ -1,5 +1,5 @@
 import path from "path";
-import fs from "fs-extra";
+import {existsSync} from "fs";
 import pathToPosix from "./pathToPosix";
 
 const IMMUTABLE_CACHE_CONTROL_HEADER = "public, max-age=31536000, immutable";
@@ -22,7 +22,7 @@ const filterNonExistentPathKeys = (config: CacheConfig) => {
   return Object.keys(config).reduce(
     (newConfig, nextConfigKey) => ({
       ...newConfig,
-      ...(fs.pathExistsSync(config[nextConfigKey].path)
+      ...(existsSync(config[nextConfigKey].path)
         ? { [nextConfigKey]: config[nextConfigKey] }
         : {})
     }),
