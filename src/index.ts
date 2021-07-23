@@ -7,7 +7,7 @@ import {
 } from "@sls-next/lambda-at-edge";
 import { existsSync } from "fs";
 import { join, relative } from "path";
-import * as jsonFile from 'jsonfile';
+import {readFileSync} from 'jsonfile';
 
 import {Construct} from 'constructs';
 import {
@@ -461,7 +461,7 @@ export class NextJSLambdaEdge extends Construct {
     }
 
     private readRoutesManifest(): RoutesManifest {
-        return jsonFile.readFileSync(
+        return readFileSync(
             join(
                 this.props.serverlessBuildOutDir,
                 "default-lambda/routes-manifest.json"
@@ -470,7 +470,7 @@ export class NextJSLambdaEdge extends Construct {
     }
 
     private readDefaultManifest(): OriginRequestDefaultHandlerManifest {
-        return jsonFile.readFileSync(
+        return readFileSync(
             join(
                 this.props.serverlessBuildOutDir,
                 "default-lambda/manifest.json"
@@ -479,7 +479,7 @@ export class NextJSLambdaEdge extends Construct {
     }
 
     private readPrerenderManifest(): PreRenderedManifest {
-        return jsonFile.readFileSync(
+        return readFileSync(
             join(
                 this.props.serverlessBuildOutDir,
                 "default-lambda/prerender-manifest.json"
@@ -493,7 +493,7 @@ export class NextJSLambdaEdge extends Construct {
             "api-lambda/manifest.json"
         );
         if (!existsSync(apiPath)) return null;
-        return jsonFile.readFileSync(apiPath);
+        return readFileSync(apiPath);
     }
 
     private readImageBuildManifest(): OriginRequestImageHandlerManifest | null {
@@ -503,7 +503,7 @@ export class NextJSLambdaEdge extends Construct {
         );
 
         return existsSync(imageLambdaPath)
-            ? jsonFile.readFileSync(imageLambdaPath)
+            ? readFileSync(imageLambdaPath)
             : null;
     }
 }
