@@ -3,13 +3,14 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "declaration": true,
-    "target": "ES2015",
-    "module": "CommonJS",
+    "target": "ES2020",
+    "module": "ES2020",
     "moduleResolution": "node",
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
-    "allowJs": true
+    "allowJs": true,
+    "skipLibCheck": true
   },
   "exclude": ["node_modules"],
   "include": ["./src"]

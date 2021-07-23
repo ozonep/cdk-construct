@@ -7,6 +7,7 @@
   "version": "3.2.0-alpha.20",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "author": "Henry Kirkness <henry@planes.studio>",
   "keywords": [
     "serverless",

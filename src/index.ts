@@ -151,7 +151,7 @@ export class NextJSLambdaEdge extends Construct {
             role: this.edgeLambdaRole,
             runtime:
                 toLambdaOption("defaultLambda", props.runtime) ??
-                lambda.Runtime.NODEJS_12_X,
+                lambda.Runtime.NODEJS_14_X,
             memorySize: toLambdaOption("defaultLambda", props.memory) ?? 512,
             timeout:
                 toLambdaOption("defaultLambda", props.timeout) ?? Duration.seconds(10)
@@ -189,7 +189,7 @@ export class NextJSLambdaEdge extends Construct {
                 role: this.edgeLambdaRole,
                 runtime:
                     toLambdaOption("apiLambda", props.runtime) ??
-                    lambda.Runtime.NODEJS_12_X,
+                    lambda.Runtime.NODEJS_14_X,
                 memorySize: toLambdaOption("apiLambda", props.memory) ?? 512,
                 timeout:
                     toLambdaOption("apiLambda", props.timeout) ?? Duration.seconds(10)
@@ -214,7 +214,7 @@ export class NextJSLambdaEdge extends Construct {
                 role: this.edgeLambdaRole,
                 runtime:
                     toLambdaOption("imageLambda", props.runtime) ??
-                    lambda.Runtime.NODEJS_12_X,
+                    lambda.Runtime.NODEJS_14_X,
                 memorySize: toLambdaOption("imageLambda", props.memory) ?? 512,
                 timeout:
                     toLambdaOption("imageLambda", props.timeout) ?? Duration.seconds(10)
