@@ -1,6 +1,6 @@
-import path from "path";
+import { join } from "path";
 import {existsSync} from "fs";
-import pathToPosix from "./pathToPosix";
+import pathToPosix from "./pathToPosix.js";
 
 const IMMUTABLE_CACHE_CONTROL_HEADER = "public, max-age=31536000, immutable";
 
@@ -35,11 +35,11 @@ const readAssetsDirectory = (options: {
 }): CacheConfig => {
   const { assetsDirectory } = options;
   // Ensure these are posix paths so they are compatible with AWS S3
-  const publicFiles = pathToPosix(path.join(assetsDirectory, "public"));
-  const staticFiles = pathToPosix(path.join(assetsDirectory, "static"));
-  const staticPages = pathToPosix(path.join(assetsDirectory, "static-pages"));
-  const nextData = pathToPosix(path.join(assetsDirectory, "_next", "data"));
-  const nextStatic = pathToPosix(path.join(assetsDirectory, "_next", "static"));
+  const publicFiles = pathToPosix(join(assetsDirectory, "public"));
+  const staticFiles = pathToPosix(join(assetsDirectory, "static"));
+  const staticPages = pathToPosix(join(assetsDirectory, "static-pages"));
+  const nextData = pathToPosix(join(assetsDirectory, "_next", "data"));
+  const nextStatic = pathToPosix(join(assetsDirectory, "_next", "static"));
 
   return filterNonExistentPathKeys({
     publicFiles: {

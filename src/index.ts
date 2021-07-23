@@ -5,9 +5,9 @@ import {
     RoutesManifest,
     PreRenderedManifest
 } from "@sls-next/lambda-at-edge";
-import {existsSync} from "fs";
-import * as path from "path";
-import jsonFile from 'jsonfile';
+import { existsSync } from "fs";
+import { join, relative } from "path";
+import * as jsonFile from 'jsonfile';
 
 import {Construct} from 'constructs';
 import {
@@ -26,14 +26,14 @@ import {
     aws_iam
 } from 'aws-cdk-lib';
 
-import {Props} from "./props";
-import {toLambdaOption} from "./utils/toLambdaOption";
-import {readAssetsDirectory} from "./utils/readAssetsDirectory";
-import {readInvalidationPathsFromManifest} from "./utils/readInvalidationPathsFromManifest";
-import {reduceInvalidationPaths} from "./utils/reduceInvalidationPaths";
-import pathToPosix from "./utils/pathToPosix";
+import {Props} from "./props.js";
+import { toLambdaOption } from "./utils/toLambdaOption.js";
+import {readAssetsDirectory} from "./utils/readAssetsDirectory.js";
+import {readInvalidationPathsFromManifest} from "./utils/readInvalidationPathsFromManifest.js";
+import {reduceInvalidationPaths} from "./utils/reduceInvalidationPaths.js";
+import pathToPosix from "./utils/pathToPosix.js";
 
-export * from "./props";
+export * from "./props.js";
 
 export class NextJSLambdaEdge extends Construct {
     private readonly routesManifest: RoutesManifest | null;
@@ -113,7 +113,7 @@ export class NextJSLambdaEdge extends Construct {
                     runtime: lambda.Runtime.NODEJS_14_X,
                     timeout: Duration.seconds(30),
                     code: lambda.Code.fromAsset(
-                        path.join(this.props.serverlessBuildOutDir, "regeneration-lambda")
+                        join(this.props.serverlessBuildOutDir, "regeneration-lambda")
                     )
                 }
             );
@@ -146,7 +146,7 @@ export class NextJSLambdaEdge extends Construct {
             },
             logRetention: logs.RetentionDays.THREE_DAYS,
             code: lambda.Code.fromAsset(
-                path.join(this.props.serverlessBuildOutDir, "default-lambda")
+                join(this.props.serverlessBuildOutDir, "default-lambda")
             ),
             role: this.edgeLambdaRole,
             runtime:
@@ -184,7 +184,7 @@ export class NextJSLambdaEdge extends Construct {
                 },
                 logRetention: logs.RetentionDays.THREE_DAYS,
                 code: lambda.Code.fromAsset(
-                    path.join(this.props.serverlessBuildOutDir, "api-lambda")
+                    join(this.props.serverlessBuildOutDir, "api-lambda")
                 ),
                 role: this.edgeLambdaRole,
                 runtime:
@@ -209,7 +209,7 @@ export class NextJSLambdaEdge extends Construct {
                 },
                 logRetention: logs.RetentionDays.THREE_DAYS,
                 code: lambda.Code.fromAsset(
-                    path.join(this.props.serverlessBuildOutDir, "image-lambda")
+                    join(this.props.serverlessBuildOutDir, "image-lambda")
                 ),
                 role: this.edgeLambdaRole,
                 runtime:
@@ -394,7 +394,7 @@ export class NextJSLambdaEdge extends Construct {
             }
         );
 
-        const assetsDirectory = path.join(props.serverlessBuildOutDir, "assets");
+        const assetsDirectory = join(props.serverlessBuildOutDir, "assets");
         const assets = readAssetsDirectory({assetsDirectory});
 
         // This `BucketDeployment` deploys just the BUILD_ID file. We don't actually
@@ -429,7 +429,7 @@ export class NextJSLambdaEdge extends Construct {
                 // at the root '/', we don't want this, we want to maintain the same
                 // path on S3 as their local path. Note that this should be a posix path.
                 destinationKeyPrefix: pathToPosix(
-                    path.relative(assetsDirectory, assetPath)
+                    relative(assetsDirectory, assetPath)
                 ),
 
                 // Source directories are uploaded with `--sync` this means that any
@@ -462,7 +462,7 @@ export class NextJSLambdaEdge extends Construct {
 
     private readRoutesManifest(): RoutesManifest {
         return jsonFile.readFileSync(
-            path.join(
+            join(
                 this.props.serverlessBuildOutDir,
                 "default-lambda/routes-manifest.json"
             )
@@ -471,7 +471,7 @@ export class NextJSLambdaEdge extends Construct {
 
     private readDefaultManifest(): OriginRequestDefaultHandlerManifest {
         return jsonFile.readFileSync(
-            path.join(
+            join(
                 this.props.serverlessBuildOutDir,
                 "default-lambda/manifest.json"
             )
@@ -480,7 +480,7 @@ export class NextJSLambdaEdge extends Construct {
 
     private readPrerenderManifest(): PreRenderedManifest {
         return jsonFile.readFileSync(
-            path.join(
+            join(
                 this.props.serverlessBuildOutDir,
                 "default-lambda/prerender-manifest.json"
             )
@@ -488,7 +488,7 @@ export class NextJSLambdaEdge extends Construct {
     }
 
     private readApiBuildManifest(): OriginRequestApiHandlerManifest | null {
-        const apiPath = path.join(
+        const apiPath = join(
             this.props.serverlessBuildOutDir,
             "api-lambda/manifest.json"
         );
@@ -497,7 +497,7 @@ export class NextJSLambdaEdge extends Construct {
     }
 
     private readImageBuildManifest(): OriginRequestImageHandlerManifest | null {
-        const imageLambdaPath = path.join(
+        const imageLambdaPath = join(
             this.props.serverlessBuildOutDir,
             "image-lambda/manifest.json"
         );

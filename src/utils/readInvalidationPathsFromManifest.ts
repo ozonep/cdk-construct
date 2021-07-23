@@ -1,4 +1,4 @@
-import * as path from "path";
+import {posix} from "path";
 import { OriginRequestDefaultHandlerManifest } from "@sls-next/lambda-at-edge";
 
 const dynamicPathToInvalidationPath = (dynamicPath: string) => {
@@ -16,7 +16,7 @@ const dynamicPathToInvalidationPath = (dynamicPath: string) => {
     return (firstSegment || "/") + "*";
   }
   // Ensure this is posix path as CloudFront needs forward slash in invalidation
-  return path.posix.join(firstSegment || "/", "*");
+  return posix.join(firstSegment || "/", "*");
 };
 
 export const readInvalidationPathsFromManifest = (
