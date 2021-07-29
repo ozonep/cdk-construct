@@ -36,37 +36,21 @@ export * from "./props.js";
 
 export class NextJSLambdaEdge extends Construct {
     private readonly routesManifest: RoutesManifest | null;
-
     private apiBuildManifest: OriginRequestApiHandlerManifest | null;
-
     private readonly imageManifest: OriginRequestImageHandlerManifest | null;
-
     private readonly defaultManifest: OriginRequestDefaultHandlerManifest;
-
     private prerenderManifest: PreRenderedManifest;
-
     public distribution: cloudfront.Distribution;
-
     public bucket: s3.Bucket;
-
     public edgeLambdaRole: aws_iam.Role;
-
     public defaultNextLambda: lambda.Function;
-
     public nextApiLambda: lambda.Function | null;
-
     public nextImageLambda: lambda.Function | null;
-
     public nextStaticsCachePolicy: cloudfront.CachePolicy;
-
     public nextImageCachePolicy: cloudfront.CachePolicy;
-
     public nextLambdaCachePolicy: cloudfront.CachePolicy;
-
     public aRecord?: aws_route53.ARecord;
-
     public regenerationQueue?: sqs.Queue;
-
     public regenerationFunction?: lambda.Function;
 
     constructor(scope: Construct, id: string, private props: Props) {
@@ -460,16 +444,15 @@ export class NextJSLambdaEdge extends Construct {
     }
 
     private readRoutesManifest(): RoutesManifest {
-        return JSON.parse(readFileSync(new URL('./default-lambda/routes-manifest.json', this.props.serverlessBuildOutDir), "utf-8")
-    );
+        return JSON.parse(readFileSync(join(this.props.serverlessBuildOutDir, 'default-lambda/routes-manifest.json'), "utf-8"));
     }
 
     private readDefaultManifest(): OriginRequestDefaultHandlerManifest {
-        return JSON.parse(readFileSync(new URL('./default-lambda/manifest.json', this.props.serverlessBuildOutDir), "utf-8"))
+        return JSON.parse(readFileSync(join(this.props.serverlessBuildOutDir, 'default-lambda/manifest.json'), "utf-8"));
     }
 
     private readPrerenderManifest(): PreRenderedManifest {
-        return JSON.parse(readFileSync(new URL('./default-lambda/prerender-manifest.json', this.props.serverlessBuildOutDir), "utf-8"))
+        return JSON.parse(readFileSync(join(this.props.serverlessBuildOutDir, 'default-lambda/prerender-manifest.json'), "utf-8"));
     }
 
     private readApiBuildManifest(): OriginRequestApiHandlerManifest | null {
@@ -478,7 +461,7 @@ export class NextJSLambdaEdge extends Construct {
             "api-lambda/manifest.json"
         );
         if (!existsSync(apiPath)) return null;
-        return JSON.parse(readFileSync(new URL('./api-lambda/manifest.json', this.props.serverlessBuildOutDir), "utf-8"))
+        return JSON.parse(readFileSync(apiPath, "utf-8"))
     }
 
     private readImageBuildManifest(): OriginRequestImageHandlerManifest | null {
@@ -488,7 +471,7 @@ export class NextJSLambdaEdge extends Construct {
         );
         
         return existsSync(imageLambdaPath)
-            ? JSON.parse(readFileSync(new URL('./image-lambda/manifest.json', this.props.serverlessBuildOutDir), "utf-8"))
+            ? JSON.parse(readFileSync(imageLambdaPath, "utf-8"))
             : null;
     }
 }
