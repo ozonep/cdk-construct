@@ -1,20 +1,20 @@
 // @ts-nocheck
 // TODO: fix line 12-14 TS errors: TS2361: The right-hand side of an 'in' expression must not be a primitive.
-import { LambdaOption } from "../props.js";
+import { LambdaOption } from '../props.js'
 
 export const toLambdaOption = <T extends unknown>(
-  key: "defaultLambda" | "apiLambda" | "imageLambda",
+  key: 'defaultLambda' | 'apiLambda' | 'imageLambda',
   option?: LambdaOption<T>
 ): T | undefined => {
   if (
-    typeof option !== "object" ||
+    typeof option !== 'object' ||
     !(
-      "defaultLambda" in option ||
-      "apiLambda" in option ||
-      "imageLambda" in option
+      'defaultLambda' in option ||
+      'apiLambda' in option ||
+      'imageLambda' in option
     )
   ) {
-    return option as T | undefined;
+    return option as T | undefined
   }
-  return option[key];
-};
+  return option[key]
+}

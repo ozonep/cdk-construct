@@ -6,8 +6,8 @@ export const reduceInvalidationPaths = (
   invalidationPaths: string[]
 ): string[] => {
   const wildCardDirectories = invalidationPaths
-    .filter((invalidationPath) => invalidationPath.endsWith("/*"))
-    .map((invalidationPath) => invalidationPath.replace("/*", ""));
+    .filter((invalidationPath) => invalidationPath.endsWith('/*'))
+    .map((invalidationPath) => invalidationPath.replace('/*', ''))
 
   return invalidationPaths.filter((invalidationPath) => {
     return !wildCardDirectories.some(
@@ -16,6 +16,6 @@ export const reduceInvalidationPaths = (
         invalidationPath !== `${wildCardDirectory}*` &&
         invalidationPath !== `${wildCardDirectory}/*` &&
         wildCardDirectory !== invalidationPath
-    );
-  });
-};
+    )
+  })
+}

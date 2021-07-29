@@ -1,5 +1,5 @@
-import {posix} from "path";
-import { OriginRequestDefaultHandlerManifest } from "@sls-next/lambda-at-edge";
+import { posix } from 'path'
+import { OriginRequestDefaultHandlerManifest } from '@sls-next/lambda-at-edge'
 
 const dynamicPathToInvalidationPath = (dynamicPath: string) => {
   // Match "/:", "/[" or "/[[..."
@@ -7,17 +7,17 @@ const dynamicPathToInvalidationPath = (dynamicPath: string) => {
   // where a route without both the the group and the slash matches.
   // E.g. /pages/[[...slug]] matches on /pages and /pages/foo
 
-  const firstSplit = dynamicPath.match(/\/(:|\[(\[\.\.\.)?)/);
-  const [firstSegment] = dynamicPath.split(/\/[:[]/);
+  const firstSplit = dynamicPath.match(/\/(:|\[(\[\.\.\.)?)/)
+  const [firstSegment] = dynamicPath.split(/\/[:[]/)
 
-  if (firstSplit && firstSplit[0] === "/[[...") {
+  if ((firstSplit != null) && firstSplit[0] === '/[[...') {
     // If the firstSplit is the optional catch-all,
     // append the wildcard directly (without a slash)
-    return (firstSegment || "/") + "*";
+    return (firstSegment || '/') + '*'
   }
   // Ensure this is posix path as CloudFront needs forward slash in invalidation
-  return posix.join(firstSegment || "/", "*");
-};
+  return posix.join(firstSegment || '/', '*')
+}
 
 export const readInvalidationPathsFromManifest = (
   manifest: OriginRequestDefaultHandlerManifest
@@ -35,5 +35,5 @@ export const readInvalidationPathsFromManifest = (
       dynamicPathToInvalidationPath
     ),
     ...Object.keys(manifest.pages.ssg?.nonDynamic || {})
-  ];
-};
+  ]
+}

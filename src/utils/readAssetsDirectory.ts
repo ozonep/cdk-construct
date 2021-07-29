@@ -1,45 +1,45 @@
-import { join } from "path";
-import {existsSync} from "fs";
-import pathToPosix from "./pathToPosix.js";
+import { join } from 'path'
+import { existsSync } from 'fs'
+import pathToPosix from './pathToPosix.js'
 
-const IMMUTABLE_CACHE_CONTROL_HEADER = "public, max-age=31536000, immutable";
+const IMMUTABLE_CACHE_CONTROL_HEADER = 'public, max-age=31536000, immutable'
 
 const SERVER_CACHE_CONTROL_HEADER =
-  "public, max-age=0, s-maxage=2678400, must-revalidate";
+  'public, max-age=0, s-maxage=2678400, must-revalidate'
 
 const DEFAULT_PUBLIC_DIR_CACHE_CONTROL =
-  "public, max-age=31536000, must-revalidate";
+  'public, max-age=31536000, must-revalidate'
 
 type CacheConfig = Record<
-  string,
-  {
-    cacheControl: string;
-    path: string;
-  }
->;
+string,
+{
+  cacheControl: string
+  path: string
+}
+>
 
 const filterNonExistentPathKeys = (config: CacheConfig) => {
-  return Object.keys(config).reduce(
+  return Object.keys(config).reduce<CacheConfig>(
     (newConfig, nextConfigKey) => ({
       ...newConfig,
       ...(existsSync(config[nextConfigKey].path)
         ? { [nextConfigKey]: config[nextConfigKey] }
         : {})
     }),
-    {} as CacheConfig
-  );
-};
+    {}
+  )
+}
 
 const readAssetsDirectory = (options: {
-  assetsDirectory: string;
+  assetsDirectory: string
 }): CacheConfig => {
-  const { assetsDirectory } = options;
+  const { assetsDirectory } = options
   // Ensure these are posix paths so they are compatible with AWS S3
-  const publicFiles = pathToPosix(join(assetsDirectory, "public"));
-  const staticFiles = pathToPosix(join(assetsDirectory, "static"));
-  const staticPages = pathToPosix(join(assetsDirectory, "static-pages"));
-  const nextData = pathToPosix(join(assetsDirectory, "_next", "data"));
-  const nextStatic = pathToPosix(join(assetsDirectory, "_next", "static"));
+  const publicFiles = pathToPosix(join(assetsDirectory, 'public'))
+  const staticFiles = pathToPosix(join(assetsDirectory, 'static'))
+  const staticPages = pathToPosix(join(assetsDirectory, 'static-pages'))
+  const nextData = pathToPosix(join(assetsDirectory, '_next', 'data'))
+  const nextStatic = pathToPosix(join(assetsDirectory, '_next', 'static'))
 
   return filterNonExistentPathKeys({
     publicFiles: {
@@ -59,7 +59,7 @@ const readAssetsDirectory = (options: {
       path: nextStatic,
       cacheControl: IMMUTABLE_CACHE_CONTROL_HEADER
     }
-  });
-};
+  })
+}
 
-export { readAssetsDirectory };
+export { readAssetsDirectory }

@@ -1,25 +1,25 @@
 import {
-    Duration,
-    StackProps,
-    aws_certificatemanager,
-    aws_cloudfront,
-    aws_lambda,
-    aws_route53,
-    aws_s3
-} from 'aws-cdk-lib';
+  Duration,
+  StackProps,
+  aws_certificatemanager,
+  aws_cloudfront,
+  aws_lambda,
+  aws_route53,
+  aws_s3
+} from 'aws-cdk-lib'
 
 export type LambdaOption<T> =
     | T
-    | { defaultLambda?: T; apiLambda?: T; imageLambda?: T };
+    | { defaultLambda?: T, apiLambda?: T, imageLambda?: T }
 
 export interface Props extends StackProps {
-    /**
+  /**
      * The directory that holds the output from the serverless builder.
      *
      * i.e. `serverlessBuildOutDir: new Builder(entry, outDir, {...}).outputDir`
      */
-    serverlessBuildOutDir: string;
-    /**
+  serverlessBuildOutDir: string
+  /**
      * If you'd like a custom domain for your site, you'll need to pass in a list
      * of full `domainNames` and a `certificate`.
      *
@@ -28,44 +28,44 @@ export interface Props extends StackProps {
      * the distribution information via the `distribution` property on the
      * `NextJSLambdaEdge` construct instance, for external DNS configuration.
      */
-    domain?: {
-        hostedZone?: aws_route53.IHostedZone;
-        certificate: aws_certificatemanager.ICertificate;
-        domainNames: string[];
-    };
-    /**
+  domain?: {
+    hostedZone?: aws_route53.IHostedZone
+    certificate: aws_certificatemanager.ICertificate
+    domainNames: string[]
+  }
+  /**
      * Override props passed to the underlying s3 bucket
      */
-    s3Props?: Partial<aws_s3.BucketProps>;
-    /**
+  s3Props?: Partial<aws_s3.BucketProps>
+  /**
      * Lambda memory limit(s)
      */
-    memory?: LambdaOption<number>;
-    /**
+  memory?: LambdaOption<number>
+  /**
      * Lambda timeout(s)
      */
-    timeout?: LambdaOption<Duration>;
-    /**
+  timeout?: LambdaOption<Duration>
+  /**
      * Lambda name(s)
      */
-    name?: LambdaOption<string>;
-    /**
+  name?: LambdaOption<string>
+  /**
      * Lambda runtimes(s)
      */
-    runtime?: LambdaOption<aws_lambda.Runtime>;
-    /**
+  runtime?: LambdaOption<aws_lambda.Runtime>
+  /**
      * Cache Policy Name(s)
      */
-    cachePolicyName?: {
-        staticsCache?: string;
-        imageCache?: string;
-        lambdaCache?: string;
-    };
-    /**
+  cachePolicyName?: {
+    staticsCache?: string
+    imageCache?: string
+    lambdaCache?: string
+  }
+  /**
      * Enable logging on the cloudfront distribution
      */
-    withLogging?: boolean;
-    /**
+  withLogging?: boolean
+  /**
      * Provide a list of cookies to forward to the CloudFront origin.
      *
      * This is useful if your SSR page is different based on the user requesting
@@ -73,20 +73,20 @@ export interface Props extends StackProps {
      *
      * .e.g ['my-apps-auth-token-cookie-key']
      */
-    whiteListedCookies?: string[];
-    /**
+  whiteListedCookies?: string[]
+  /**
      * Provide a subset (or all) of the props to override the CloudFront
      * distributions default props.
      */
-    defaultBehavior?: Partial<aws_cloudfront.BehaviorOptions>;
-    /**
+  defaultBehavior?: Partial<aws_cloudfront.BehaviorOptions>
+  /**
      * Optionally pass one or many custom CloudFront behaviours.
      *
      * This is handy if you want to adjust how certain assets are cached, or add
      * another `lambda@edge` endpoint.
      */
-    behaviours?: Record<string, aws_cloudfront.BehaviorOptions>;
-    /**
+  behaviours?: Record<string, aws_cloudfront.BehaviorOptions>
+  /**
      * Pass an array of invalidation paths. By default this construct  will
      * invalidate all paths found in your pages manifest. You can reduce the
      * number of invalidations created by invalidating all paths using:
@@ -94,9 +94,9 @@ export interface Props extends StackProps {
      * invalidationPaths: ["/*"]
      * ```
      */
-    invalidationPaths?: string[];
-    /**
+  invalidationPaths?: string[]
+  /**
      * Override props passed to the underlying s3 bucket
      */
-    cloudfrontProps?: Partial<aws_cloudfront.DistributionProps>;
+  cloudfrontProps?: Partial<aws_cloudfront.DistributionProps>
 }
